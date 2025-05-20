@@ -1,4 +1,8 @@
-// -----------------------------------G L O B A L--------------------------------------
+// -------------------C O N S T A N T S--------------------------
+export const BASE_API_URL = "https://bytegrad.com/course-assets/js/2/api";
+export const DEFAULT_DISPLAY_TIME = 3500;
+
+// -------------------S E L E C T O R S--------------------------
 export const bookmarksBtnEl = document.querySelector(".bookmarks-btn");
 export const errorEl = document.querySelector(".error");
 export const errorTextEl = document.querySelector(".error__text");
