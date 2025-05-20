@@ -44,8 +44,12 @@ const submitHandler = (event) => {
   fetch(`${BASE_API_URL}/jobs?search=${searchText}`)
     .then((res) => {
       if (!res.ok) {
-        console.log("Something went wrong");
-        return;
+        // 4xx, 5xx status code
+        //console.log("Something went wrong");
+        throw new Error(
+          "Resource Issue (e.g. resourse doesn't exist) or server issue"
+        ); // constructor function
+        //return;
       }
       return res.json();
     })
@@ -63,7 +67,10 @@ const submitHandler = (event) => {
       // render job items in search job list
       renderJobList(jobItems);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      renderSpinner("search");
+      renderError(error.message);
+    }); //network problem or other errors (e.g. trying to parse something not JSON as JSON)
 };
 
 searchFormEl.addEventListener("submit", submitHandler);

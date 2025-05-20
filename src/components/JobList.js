@@ -5,6 +5,7 @@ import {
 } from "../common.js";
 import renderSpinner from "./Spinner.js";
 import renderJobDetails from "./JobDetails.js";
+import renderError from "./Error.js";
 
 // -----------------------------------JOB LIST COMPONENT --------------------------------------
 
@@ -72,8 +73,9 @@ const clickHandler = (event) => {
   fetch(`${BASE_API_URL}/jobs/${id}`)
     .then((res) => {
       if (!res.ok) {
-        console.log("Something went wrong");
-        return;
+        throw new Error(
+          "Resource issue (e.g. resource doesn't exist) or server issue"
+        );
       }
       return res.json();
     })
@@ -87,7 +89,10 @@ const clickHandler = (event) => {
       //render job details
       renderJobDetails(jobItem);
     })
-    .catch((error) => console.log(error));
+    .catch((error) => {
+      renderSpinner("job-details");
+      renderError(error.message);
+    });
 };
 
 jobListSearchEl.addEventListener("click", clickHandler);
