@@ -12,10 +12,11 @@ import {
 import renderError from "./Error.js";
 import renderSpinner from "./Spinner.js";
 import renderJobList from "./JobList.js";
+import { getData } from "../common.js";
 
 // -----------------------------------SEARCH COMPONENT --------------------------------------
-
-const submitHandler = (event) => {
+//have to set this function to be asynchronous so we could fetch the data using async/await
+const submitHandler = async (event) => {
   // prevent default behavior
   event.preventDefault();
 
@@ -29,7 +30,7 @@ const submitHandler = (event) => {
     renderError("Your Search May Not Contain Numbers.");
     return;
   }
-  //blur input
+  //blur input (unfocus)
   searchInputEl.blur();
 
   // clear previous search results
@@ -41,36 +42,60 @@ const submitHandler = (event) => {
   // fetch search result NOTICE the PATH '?search=javascript&new=true'
   // with a query string
   // using BACKTICKS HERE to insert javascript
-  fetch(`${BASE_API_URL}/jobs?search=${searchText}`)
-    .then((res) => {
-      if (!res.ok) {
-        // 4xx, 5xx status code
-        //console.log("Something went wrong");
-        throw new Error(
-          "Resource Issue (e.g. resourse doesn't exist) or server issue"
-        ); // constructor function
-        //return;
-      }
-      return res.json();
-    })
-    .then((data) => {
-      //extract job items from the data
-      const { jobItems } = data;
-      //display what you get
-      //console.log(jobItems);
-      // remove the spinner class
-      renderSpinner("search");
 
-      //render number of results
-      numberEl.textContent = jobItems.length;
+  try {
+    //fetch search results
+    //get data
+    const data = await getData(`${BASE_API_URL}/jobs?search=${searchText}`);
 
-      // render job items in search job list
-      renderJobList(jobItems);
-    })
-    .catch((error) => {
-      renderSpinner("search");
-      renderError(error.message);
-    }); //network problem or other errors (e.g. trying to parse something not JSON as JSON)
+    //extract job items
+    const { jobItems } = data;
+
+    //remove spinner
+    renderSpinner("search");
+
+    //render number of results
+    numberEl.textContent = jobItems.length;
+
+    //render job items in search job list
+    renderJobList(jobItems);
+  } catch (error) {
+    renderSpinner("search");
+    renderError(error.message);
+  }
 };
 
 searchFormEl.addEventListener("submit", submitHandler);
+
+//
+
+// fetch(`${BASE_API_URL}/jobs?search=${searchText}`)
+//   .then((res) => {
+//     if (!res.ok) {
+//       // 4xx, 5xx status code
+//       //console.log("Something went wrong");
+//       throw new Error(
+//         "Resource Issue (e.g. resourse doesn't exist) or server issue"
+//       ); // constructor function
+//       //return;
+//     }
+//     return res.json();
+//   })
+//   .then((data) => {
+//     //extract job items from the data
+//     const { jobItems } = data;
+//     //display what you get
+//     //console.log(jobItems);
+//     // remove the spinner class
+//     renderSpinner("search");
+
+//     //render number of results
+//     numberEl.textContent = jobItems.length;
+
+//     // render job items in search job list
+//     renderJobList(jobItems);
+//   })
+//   .catch((error) => {
+//     renderSpinner("search");
+//     renderError(error.message);
+//   }); //network problem or other errors (e.g. trying to parse something not JSON as JSON)

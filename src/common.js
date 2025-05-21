@@ -43,3 +43,17 @@ export const spinnerJobDetailsEl = document.querySelector(
 );
 
 // in Node.js -> module.exports = {};
+
+// ---------------Helper/Utility Functions--------------------
+
+export const getData = async (completeURL) => {
+  const response = await fetch(completeURL);
+  const data = await response.json();
+
+  if (!response.ok) {
+    // 4xx, 5xx status code
+    //console.log("Something went wrong");
+    throw new Error(data.description);
+  }
+  return data;
+};

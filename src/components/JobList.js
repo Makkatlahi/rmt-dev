@@ -6,6 +6,7 @@ import {
 import renderSpinner from "./Spinner.js";
 import renderJobDetails from "./JobDetails.js";
 import renderError from "./Error.js";
+import { getData } from "../common.js";
 
 // -----------------------------------JOB LIST COMPONENT --------------------------------------
 
@@ -35,7 +36,7 @@ const renderJobList = (jobItems) => {
   });
 };
 
-const clickHandler = (event) => {
+const clickHandler = async (event) => {
   event.preventDefault();
 
   //get clicked job item in list
@@ -69,32 +70,46 @@ const clickHandler = (event) => {
   // get the id of the job item that was clicked
   const id = jobItemEl.children[0].getAttribute("href");
 
-  // fetch job item data
-  fetch(`${BASE_API_URL}/jobs/${id}`)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(
-          "Resource issue (e.g. resource doesn't exist) or server issue"
-        );
-      }
-      return res.json();
-    })
-    .then((data) => {
-      //extract job item
-      const { jobItem } = data;
+  try {
+    // fetch job item data
+    const data = await getData(`${BASE_API_URL}/jobs/${id}`);
+    const { jobItem } = data;
 
-      //remove spinner
-      renderSpinner("job-details");
+    //remove spinner
+    renderSpinner("job-details");
 
-      //render job details
-      renderJobDetails(jobItem);
-    })
-    .catch((error) => {
-      renderSpinner("job-details");
-      renderError(error.message);
-    });
+    //render job details
+    renderJobDetails(jobItem);
+  } catch (error) {
+    renderSpinner("job-details");
+    renderError(error.message);
+  }
 };
 
 jobListSearchEl.addEventListener("click", clickHandler);
 
 export default renderJobList;
+
+// fetch(`${BASE_API_URL}/jobs/${id}`)
+//   .then((res) => {
+//     if (!res.ok) {
+//       throw new Error(
+//         "Resource issue (e.g. resource doesn't exist) or server issue"
+//       );
+//     }
+//     return res.json();
+//   })
+//   .then((data) => {
+//     //extract job item
+//     const { jobItem } = data;
+
+//     //remove spinner
+//     renderSpinner("job-details");
+
+//     //render job details
+//     renderJobDetails(jobItem);
+//   })
+//   .catch((error) => {
+//     renderSpinner("job-details");
+//     renderError(error.message);
+//   });

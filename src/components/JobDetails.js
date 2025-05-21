@@ -10,9 +10,9 @@ const renderJobDetails = (jobItem) => {
 
     <section class="job-info">
         <div class="job-info__left">
-            <div class="job-info__badge">${jobItem.badgeLetters}d</div>
+            <div class="job-info__badge">${jobItem.badgeLetters}</div>
             <div class="job-info__below-badge">
-                <time class="job-info__time">${jobItem.daysAgo}</time>
+                <time class="job-info__time">${jobItem.daysAgo}d</time>
                 <button class="job-info__bookmark-btn">
                     <i class="fa-solid fa-bookmark job-info__bookmark-icon"></i>
                 </button>
