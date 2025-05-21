@@ -2,6 +2,11 @@
 export const BASE_API_URL = "https://bytegrad.com/course-assets/js/2/api";
 export const DEFAULT_DISPLAY_TIME = 3500;
 
+// -----------------------S T A T E------------------------------
+export const state = {
+  searchJobItems: [],
+};
+
 // -------------------S E L E C T O R S--------------------------
 export const bookmarksBtnEl = document.querySelector(".bookmarks-btn");
 export const errorEl = document.querySelector(".error");
@@ -44,7 +49,7 @@ export const spinnerJobDetailsEl = document.querySelector(
 
 // in Node.js -> module.exports = {};
 
-// ---------------Helper/Utility Functions--------------------
+// -----------H E L P E R / U T I L I T Y  F U N C T I O N S----------
 
 export const getData = async (completeURL) => {
   const response = await fetch(completeURL);
