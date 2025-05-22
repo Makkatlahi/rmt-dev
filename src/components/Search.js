@@ -6,6 +6,8 @@ import {
   BASE_API_URL,
   searchInputEl,
   searchFormEl,
+  sortingBtnRecentEl,
+  sortingBtnRelevantEl,
   jobListSearchEl,
   numberEl,
   state,
@@ -14,6 +16,7 @@ import renderError from "./Error.js";
 import renderSpinner from "./Spinner.js";
 import renderJobList from "./JobList.js";
 import { getData } from "../common.js";
+import renderPaginationButtons from "./Pagination.js";
 
 // -----------------------------------SEARCH COMPONENT --------------------------------------
 //have to set this function to be asynchronous so we could fetch the data using async/await
@@ -37,6 +40,10 @@ const submitHandler = async (event) => {
   // clear previous search results
   jobListSearchEl.innerHTML = "";
 
+  // reset sorting buttons
+  sortingBtnRecentEl.classList.remove("sorting__button--active");
+  sortingBtnRelevantEl.classList.add("sorting__button--active");
+
   // render spinner
   renderSpinner("search");
 
@@ -54,12 +61,16 @@ const submitHandler = async (event) => {
 
     //update state
     state.searchJobItems = jobItems;
+    state.currentPage = 1;
 
     //remove spinner
     renderSpinner("search");
 
     //render number of results
     numberEl.textContent = jobItems.length;
+
+    //render pagination buttons
+    renderPaginationButtons();
 
     //render job items in search job list
     renderJobList();
