@@ -23,16 +23,24 @@ const renderJobList = () => {
     )
     .forEach((jobItem) => {
       const newJobItemHTML = `
-      <li class="job-item">
+      <li class="job-item ${
+        state.activeJobItem.id === jobItem.id ? "job-item--active" : ""
+      }">
         <a class="job-item__link" href="${jobItem.id}">
             <div class="job-item__badge">${jobItem.badgeLetters}</div>
             <div class="job-item__middle">
                <h3 class="third-heading">${jobItem.title}</h3>
                <p class="job-item__company">${jobItem.company}</p>
                <div class="job-item__extras">
-                  <p class="job-item__extra"><i class="fa-solid fa-clock job-item__extra-icon"></i> ${jobItem.duration}</p>
-                  <p class="job-item__extra"><i class="fa-solid fa-money-bill job-item__extra-icon"></i> ${jobItem.salary}</p>
-                  <p class="job-item__extra"><i class="fa-solid fa-location-dot job-item__extra-icon"></i> ${jobItem.location}</p>
+                  <p class="job-item__extra"><i class="fa-solid fa-clock job-item__extra-icon"></i> ${
+                    jobItem.duration
+                  }</p>
+                  <p class="job-item__extra"><i class="fa-solid fa-money-bill job-item__extra-icon"></i> ${
+                    jobItem.salary
+                  }</p>
+                  <p class="job-item__extra"><i class="fa-solid fa-location-dot job-item__extra-icon"></i> ${
+                    jobItem.location
+                  }</p>
                </div>
             </div>
             <div class="job-item__right">
@@ -70,7 +78,6 @@ const clickHandler = async (event) => {
 
   // add active class to job item element
   jobItemEl.classList.add("job-item--active");
-
   //empty job details section
   jobDetailsContentEl.innerHTML = "";
 
@@ -79,6 +86,16 @@ const clickHandler = async (event) => {
 
   // get the id of the job item that was clicked
   const id = jobItemEl.children[0].getAttribute("href");
+
+  // update the state here so it's quicker
+  //list/array of objects
+  //find the id that matches the one the user clicked
+  state.activeJobItem = state.searchJobItems.find(
+    (jobItem) => jobItem.id === +id
+  );
+
+  // add id to url
+  history.pushState(null, "", `/#${id}`);
 
   try {
     // fetch job item data
