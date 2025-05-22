@@ -4,6 +4,7 @@ import {
   jobListSearchEl,
   jobDetailsContentEl,
   state,
+  jobListBookmarksEl,
 } from "../common.js";
 import renderSpinner from "./Spinner.js";
 import renderJobDetails from "./JobDetails.js";
@@ -12,17 +13,29 @@ import { getData } from "../common.js";
 
 // -----------------------------------JOB LIST COMPONENT --------------------------------------
 
-const renderJobList = () => {
-  //remove previous job items
-  jobListSearchEl.innerHTML = "";
+const renderJobList = (whichJobList = "search") => {
+  // determine correct selector for job list (search reasults list or bookmarks list)
+  const jobListEl =
+    whichJobList === "search" ? jobListSearchEl : jobListBookmarksEl;
 
-  state.searchJobItems
-    .slice(
+  //remove previous job items
+  jobListEl.innerHTML = "";
+
+  // determine the job items that should be rendered
+  let jobItems;
+  if (whichJobList === "search") {
+    jobItems = state.searchJobItems.slice(
       state.currentPage * RESULTS_PER_PAGE - RESULTS_PER_PAGE,
       state.currentPage * RESULTS_PER_PAGE
-    )
-    .forEach((jobItem) => {
-      const newJobItemHTML = `
+    );
+  } else if (whichJobList === "bookmarks") {
+    // since we don't have pages for bookmarks
+    jobItems = state.bookmarkJobItems;
+  }
+
+  // display job items
+  jobItems.forEach((jobItem) => {
+    const newJobItemHTML = `
       <li class="job-item ${
         state.activeJobItem.id === jobItem.id ? "job-item--active" : ""
       }">
@@ -50,8 +63,8 @@ const renderJobList = () => {
         </a>
       </li>`;
 
-      jobListSearchEl.insertAdjacentHTML("beforeend", newJobItemHTML);
-    });
+    jobListEl.insertAdjacentHTML("beforeend", newJobItemHTML);
+  });
 };
 
 const clickHandler = async (event) => {
@@ -72,9 +85,18 @@ const clickHandler = async (event) => {
   //     .classList.remove(".job-item--active");
 
   // USING OPTIONAL CHAINING '?'
+  // EDIT: we removed the '?' from ?.classList section because
+  // we are now using querySelectorAll
+  // then added forEach jobItemWithActiveClass to remove
+  // whatever class is currently active so that the tab is
+  // not highlighted anymore when clicking another tab
+
+  // remove the active class from previously active job items
   document
-    .querySelector(".job-item--active")
-    ?.classList.remove("job-item--active");
+    .querySelectorAll(".job-item--active")
+    .forEach((jobItemWithActiveClass) =>
+      jobItemWithActiveClass.classList.remove("job-item--active")
+    );
 
   // add active class to job item element
   jobItemEl.classList.add("job-item--active");
@@ -114,6 +136,7 @@ const clickHandler = async (event) => {
 };
 
 jobListSearchEl.addEventListener("click", clickHandler);
+jobListBookmarksEl.addEventListener("click", clickHandler);
 
 export default renderJobList;
 
