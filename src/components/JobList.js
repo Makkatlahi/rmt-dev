@@ -34,6 +34,7 @@ const renderJobList = (whichJobList = "search") => {
   }
 
   // display job items
+  // Edit: Shorcicuit the icon for bookmarks
   jobItems.forEach((jobItem) => {
     const newJobItemHTML = `
       <li class="job-item ${
@@ -57,7 +58,11 @@ const renderJobList = (whichJobList = "search") => {
                </div>
             </div>
             <div class="job-item__right">
-              <i class="fa-solid fa-bookmark job-item__bookmark-icon"></i>
+              <i class="fa-solid fa-bookmark job-item__bookmark-icon ${
+                state.bookmarkJobItems.some(
+                  (bookmarkJobItem) => bookmarkJobItem.id === jobItem.id
+                ) && "job-item__bookmark-icon--bookmarked"
+              }"></i>
               <time class="job-item__time">${jobItem.daysAgo}d</time>
             </div>
         </a>
@@ -98,8 +103,8 @@ const clickHandler = async (event) => {
       jobItemWithActiveClass.classList.remove("job-item--active")
     );
 
-  // add active class to job item element
-  jobItemEl.classList.add("job-item--active");
+  // // add active class to job item element
+  // jobItemEl.classList.add("job-item--active");
   //empty job details section
   jobDetailsContentEl.innerHTML = "";
 
@@ -116,6 +121,9 @@ const clickHandler = async (event) => {
   const allJobItems = [...state.searchJobItems, ...state.bookmarkJobItems];
 
   state.activeJobItem = allJobItems.find((jobItem) => jobItem.id === +id);
+
+  // render search job list
+  renderJobList("search");
 
   // add id to url
   history.pushState(null, "", `/#${id}`);
