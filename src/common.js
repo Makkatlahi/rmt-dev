@@ -4,6 +4,7 @@ export const DEFAULT_DISPLAY_TIME = 3500;
 export const RESULTS_PER_PAGE = 7;
 
 // -----------------------S T A T E------------------------------
+// SINGLE SOURCE OF TRUTH
 export const state = {
   searchJobItems: [],
   bookmarkJobItems: [],

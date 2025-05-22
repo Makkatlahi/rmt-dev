@@ -112,9 +112,10 @@ const clickHandler = async (event) => {
   // update the state here so it's quicker
   //list/array of objects
   //find the id that matches the one the user clicked
-  state.activeJobItem = state.searchJobItems.find(
-    (jobItem) => jobItem.id === +id
-  );
+
+  const allJobItems = [...state.searchJobItems, ...state.bookmarkJobItems];
+
+  state.activeJobItem = allJobItems.find((jobItem) => jobItem.id === +id);
 
   // add id to url
   history.pushState(null, "", `/#${id}`);

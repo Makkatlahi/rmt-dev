@@ -23,6 +23,13 @@ const clickHandler = (event) => {
     state.bookmarkJobItems.push(state.activeJobItem);
   }
 
+  // Persist Data With Local Storage
+  // can only store strings in local storage, use JSON.stringify
+  localStorage.setItem(
+    "bookmarkJobItems",
+    JSON.stringify(state.bookmarkJobItems)
+  );
+
   // update bookmark icon
   // need to select it here because it doesn't exist until time of navigation
   document
