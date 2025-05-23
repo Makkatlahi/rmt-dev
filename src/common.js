@@ -55,7 +55,6 @@ export const spinnerJobDetailsEl = document.querySelector(
 // in Node.js -> module.exports = {};
 
 // -----------H E L P E R / U T I L I T Y  F U N C T I O N S----------
-
 export const getData = async (completeURL) => {
   const response = await fetch(completeURL);
   const data = await response.json();
