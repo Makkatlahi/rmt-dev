@@ -66,3 +66,10 @@ export const getData = async (completeURL) => {
   }
   return data;
 };
+
+// export const formatDate = (daysAgo) => {
+//   const date = new Date();
+//   const dayIndex = date.getDate() - daysAgo;
+//   date.setDate(dayIndex);
+//   return date.toLocaleDateString("en-US", { weekday: "short" });
+// };
