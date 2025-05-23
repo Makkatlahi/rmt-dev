@@ -8,3 +8,5 @@ import "./components/Router.js";
 import "./components/Search.js";
 import "./components/Spinner.js";
 import "./components/Sorting.js";
+
+import "./index.css";

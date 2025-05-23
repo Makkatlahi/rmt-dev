@@ -23,9 +23,17 @@
   "devDependencies": {
     "@babel/core": "^7.27.1",
     "@babel/preset-env": "^7.27.2",
+    "autoprefixer": "^10.4.21",
     "babel-loader": "^10.0.0",
     "core-js": "^3.42.0",
+    "cssnano": "^7.0.7",
+    "postcss-loader": "^8.1.1",
+    "postcss-pxtorem": "^6.1.0",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1"
+  },
+  "dependencies": {
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.2"
   }
 }
